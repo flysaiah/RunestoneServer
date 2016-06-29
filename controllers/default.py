@@ -97,7 +97,7 @@ def user():
     if 'login' in request.args(0):
         # add info text re: using local auth. CSS styled to match text on Janrain form
         sign_in_text = TR(TD('Sign in with your Runestone Interactive account', _colspan='3'), _id='sign_in_text')
-        form[0][0].insert(0, sign_in_text)
+        #form[0][0].insert(0, sign_in_text)
 
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     try:
@@ -105,7 +105,7 @@ def user():
     except AttributeError: # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
 
-    return dict(form=form)
+    return form
 
 def download(): return response.download(request,db)
 def call(): return service()
@@ -113,6 +113,7 @@ def call(): return service()
 
 @auth.requires_login()
 def index():
+    print("OK!!!")
     course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
 
     if 'boguscourse' in course.course_name:

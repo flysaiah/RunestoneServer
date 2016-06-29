@@ -15,12 +15,15 @@
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'plugin_social_auth/css/w2psa.css')}}" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
     <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
     <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
-    <script src="{{=URL('static', 'js/web2py.js')}}"></script>    
+    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-3.0.0/js/bootstrap.min.js')}}"></script>
     <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
+    <script src="{{=URL('static', 'plugin_social_auth/js/w2psa.js')}}"></script>
     <script type="text/javascript" src="{{=URL('static', 'js/dd.js')}}"></script>
     <script type="text/javascript">
       var eBookConfig = {};
@@ -132,7 +135,7 @@
             {{ if auth.user: }}
               <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
               <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>              
+              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
               <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
             {{ else: }}
               <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
@@ -151,8 +154,8 @@
           </a>
           <ul class="dropdown-menu user-menu">
 
-            <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li> 
-            <li class="divider"></li>            
+            <li><a href='/{{=request.application}}/static/overview/instructor.html'>Help for Instructors</a></li>
+            <li class="divider"></li>
             <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
             <li><a href='/{{=request.application}}/static/help/bugreports.html'>Report A Problem</a></li>
           </ul>

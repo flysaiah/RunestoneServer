@@ -43,8 +43,9 @@ response.generic_patterns = ['*'] if request.is_local else []
 ## (more options discussed in gluon/tools.py)
 #########################################################################
 
-from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
-auth = Auth(db, hmac_key=Auth.get_or_create_key())
+from gluon.tools import Crud, Service, PluginManager, prettydate
+from plugin_social_auth.utils import SocialAuth
+auth = SocialAuth(db)
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
 if settings.enable_captchas:
@@ -58,6 +59,34 @@ if settings.enable_captchas:
 auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
 #auth.settings.retrieve_username_captcha	= False
+
+plugins.social_auth.SOCIAL_AUTH_TWITTER_KEY = "foo"
+plugins.social_auth.SOCIAL_AUTH_TWITTER_SECRET = "foo"
+plugins.social_auth.SOCIAL_AUTH_FACEBOOK_KEY = "foo"
+plugins.social_auth.SOCIAL_AUTH_FACEBOOK_SECRET = "foo"
+
+# Configure PSA with all required backends
+# Replace this by the backends that you want to use and have API keys for
+plugins.social_auth.SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
+    # You need this one to enable manual input for openid.
+    # It must _not_ be configured in SOCIAL_AUTH_PROVIDERS (below)
+    'social.backends.open_id.OpenIdAuth',
+
+    'social.backends.live.LiveOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2')
+
+# Configure the providers that you want to show in the login form.
+# <backend name> : <display name>
+# (You can find the backend name in the backend files as configured above.)
+# Replace this by the backends you want to enable
+plugins.social_auth.SOCIAL_AUTH_PROVIDERS = {
+    'live': 'Live',
+    'twitter': 'Twitter',
+    'facebook': 'Facebook'}
+
+
+plugins.social_auth.SOCIAL_AUTH_APP_INDEX_URL = URL('init', 'default', 'index')
 
 
 ## create all tables needed by auth if not custom tables
@@ -205,28 +234,6 @@ auth.settings.register_next = URL('default', 'index')
 # change default session login time from 1 hour to 24 hours
 auth.settings.expiration = 3600*24
 
-## if you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
-## register with janrain.com, write your domain:api_key in private/janrain.key
-#from gluon.contrib.login_methods.rpx_account import use_janrain
-#use_janrain(auth,filename='private/janrain.key')
-try:
-    from gluon.contrib.login_methods.janrain_account import RPXAccount
-except:
-    print "Warning you should upgrade to a newer web2py for better janrain support"
-    from gluon.contrib.login_methods.rpx_account import RPXAccount
-from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
-
-janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
-                                                   request.application)
-
-janrain_form = RPXAccount(request,
-                          api_key=settings.janrain_api_key, # set in 1.py
-                          domain=settings.janrain_domain, # set in 1.py
-                          url=janrain_url)
-auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
-#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
-
-request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
 
 db.define_table('user_courses',
                 Field('user_id', 'string'),
