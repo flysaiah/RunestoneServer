@@ -133,9 +133,9 @@ div.section {
 }
 
 .CodeMirror-scroll {
-    /* this allows CM elements to be resized to (almost) any 
-     * height while still relying on max-height (which keeps 
-     * the CM editors to no more than the size needed 
+    /* this allows CM elements to be resized to (almost) any
+     * height while still relying on max-height (which keeps
+     * the CM editors to no more than the size needed
      * unless resized) */
     max-height: 30em;
     min-width: 30em;
@@ -276,27 +276,9 @@ div.flash {
     z-index: 2000;
 }
 
-/* Styles for the login, registration, and Janrain forms */
-#web2py_user_form {
-    margin-top: 10px;
-}
-
-#web2py_user_form form {
-    float: left;
-    margin-right: 150px;
-    padding-top: 3px;
-}
-
-#web2py_user_form td {
-    padding-bottom: 15px;
-}
-
-#web2py_user_form td.w2p_fw {
-    width: 299px;
-}
-
 #auth-actions {
     margin-top: 50px;
+    clear: both;
 }
 
 #sign_in_text td {

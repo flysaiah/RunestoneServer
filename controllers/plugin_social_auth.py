@@ -16,7 +16,9 @@ def complete():
         process_exception(e)
 
 def user():
-    return auth()
+    login_url = plugins.social_auth.get('SOCIAL_AUTH_APP_LOGIN_URL', None)
+    if login_url:
+        redirect(login_url)
 
 def index():
     # Redirect to app index url if it's configured

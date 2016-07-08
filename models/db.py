@@ -85,8 +85,8 @@ plugins.social_auth.SOCIAL_AUTH_PROVIDERS = {
     'twitter': 'Twitter',
     'facebook': 'Facebook'}
 
-
-plugins.social_auth.SOCIAL_AUTH_APP_INDEX_URL = URL('init', 'default', 'index')
+plugins.social_auth.SOCIAL_AUTH_APP_INDEX_URL= URL('runestone', 'default', 'index')
+plugins.social_auth.SOCIAL_AUTH_APP_LOGIN_URL = URL('runestone', 'default', 'user')
 
 
 ## create all tables needed by auth if not custom tables
