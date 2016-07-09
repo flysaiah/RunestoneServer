@@ -43,9 +43,10 @@ response.generic_patterns = ['*'] if request.is_local else []
 ## (more options discussed in gluon/tools.py)
 #########################################################################
 
-from gluon.tools import Crud, Service, PluginManager, prettydate
+from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 from plugin_social_auth.utils import SocialAuth
 auth = SocialAuth(db)
+other = Auth(db)
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
 if settings.enable_captchas:
@@ -233,7 +234,6 @@ auth.settings.register_next = URL('default', 'index')
 
 # change default session login time from 1 hour to 24 hours
 auth.settings.expiration = 3600*24
-
 
 db.define_table('user_courses',
                 Field('user_id', 'string'),
