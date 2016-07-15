@@ -16,6 +16,7 @@ def user():
     if 'register' in request.args(0):
         # If we can't pre-populate, just set it to blank.
         # This will force the user to choose a valid course name
+        return dict(form=other())
         db.auth_user.course_id.default = ''
 
         # Otherwise, use the referer URL to try to pre-populate
