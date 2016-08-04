@@ -104,9 +104,11 @@ def runlog():    # Log errors and runs with code
             setCookie = True
     div_id = request.vars.div_id
     course = request.vars.course
-    code = request.vars.code
+    code = request.vars.code if request.vars.code else ""
     ts = datetime.datetime.now()
     error_info = request.vars.errinfo
+    pre = request.vars.prefix if request.vars.prefix else ""
+    post = request.vars.suffix if request.vars.suffix else ""
     if error_info != 'success':
         event = 'ac_error'
         act = error_info
@@ -116,15 +118,26 @@ def runlog():    # Log errors and runs with code
             event = request.vars.event
         else:
             event = 'activecode'
-    db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+    db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
     if ('to_save' not in request.vars):
         # old API
-        dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+        dbid = db.acerror_log.insert(sid=sid,
+                                     div_id=div_id,
+                                     timestamp=ts,
+                                     course_id=course,
+                                     code=pre+code+post,
+                                     emessage=error_info)
         #lintAfterSave(dbid, code, div_id, sid)
     else:
         # new API
         if (request.vars.to_save != "False"):
-            dbid = db.acerror_log.insert(sid=sid,div_id=div_id,timestamp=ts,course_id=course,code=code,emessage=error_info)
+            dbid = db.acerror_log.insert(sid=sid,
+                                         div_id=div_id,
+                                         timestamp=ts,
+                                         course_id=course,
+                                         code=pre+code+post,
+                                         emessage=error_info)
+
             #lintAfterSave(dbid, code, div_id, sid)
 
             # auto-save to code table
@@ -580,12 +593,18 @@ def getaggregateresults():
         return json.dumps([dict(answerDict={}, misc={}, emess='You must be logged in')])
 
     # Yes, these two things could be done as a join.  but this **may** be better for performance
-    start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
+    if course == 'thinkcspy' or course == 'pythonds':
+        start_date = datetime.datetime.now() - datetime.timedelta(days=90)
+    else:
+        start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
-    result = db((db.useinfo.div_id == question) &
-                (db.useinfo.course_id == course) &
-                (db.useinfo.timestamp >= start_date)
-                ).select(db.useinfo.act, count, groupby=db.useinfo.act)
+    try:
+        result = db((db.useinfo.div_id == question) &
+                    (db.useinfo.course_id == course) &
+                    (db.useinfo.timestamp >= start_date)
+                    ).select(db.useinfo.act, count, groupby=db.useinfo.act)
+    except:
+        return json.dumps([dict(answerDict={}, misc={}, emess='Sorry, the request timed out')])
 
     tdata = {}
     tot = 0

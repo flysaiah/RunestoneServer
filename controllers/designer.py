@@ -53,7 +53,7 @@ def build():
         else:
             base_course = request.vars.coursetype
 
-        row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
+        row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                        rvars=request.vars,
                                                                        base_course=base_course,
                                                                        application=request.application,
@@ -78,8 +78,8 @@ def build():
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id = cid)
         db.course_instructor.insert(instructor=auth.user.id, course=cid)
-        auth.user.course_id = cid
-        auth.user.course_name = request.vars.projectname
+        auth.user.update(course_name=request.vars.projectname)  # also updates session info
+        auth.user.update(course_id=cid)
         db.executesql('''
             INSERT INTO user_courses(user_id, course_id)
             SELECT %s, %s
@@ -112,7 +112,7 @@ def build():
 
 def build_custom():
     # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=180, pvars=dict(folder=request.folder,
+    row = scheduler.queue_task(run_sphinx, timeout=300, pvars=dict(folder=request.folder,
                                                                    rvars=request.vars,
                                                                    application=request.application,
                                                                    http_host=request.env.http_host))
