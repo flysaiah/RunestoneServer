@@ -32,10 +32,16 @@ def do_complete(strategy, login, user=None, redirect_name='next',
     redirect_value = strategy.session_get(redirect_name, '') or \
                      data.get(redirect_name, '')
 
+    print("I am really confused at this point")
+
     is_authenticated = user_is_authenticated(user)
     user = is_authenticated and user or None
 
-    partial = partial_pipeline_data(strategy, user, *args, **kwargs)
+    print("HERE")
+    # For some reason this line is failing, don't know why -- for now, just don't use this partial_pipeline_data
+    #partial = partial_pipeline_data(strategy, user, *args, **kwargs)
+    print("THERE")
+    partial = False
     if partial:
         xargs, xkwargs = partial
         user = strategy.continue_pipeline(*xargs, **xkwargs)
@@ -90,7 +96,9 @@ def do_complete(strategy, login, user=None, redirect_name='next',
 
 def do_disconnect(strategy, user, association_id=None, redirect_name='next',
                   *args, **kwargs):
-    partial = partial_pipeline_data(strategy, user, *args, **kwargs)
+    # Same issue here -- this fails for some reason
+    # partial = partial_pipeline_data(strategy, user, *args, **kwargs)
+    partial = False
     if partial:
         xargs, xkwargs = partial
         if association_id and not xkwargs.get('association_id'):

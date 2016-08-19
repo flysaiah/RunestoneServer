@@ -3,6 +3,7 @@ from plugin_social_auth.social.actions import do_complete
 
 @strategy(URL('plugin_social_auth', 'complete'))
 def complete():
+    print("COMPLETE")
     # Store "next" value in session
     _next = current.request.vars.get('next', None)
 
@@ -16,6 +17,7 @@ def complete():
         process_exception(e)
 
 def user():
+    return auth()
     login_url = plugins.social_auth.get('SOCIAL_AUTH_APP_LOGIN_URL', None)
     if login_url:
         redirect(login_url)

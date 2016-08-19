@@ -64,8 +64,8 @@ auth.settings.retrieve_password_captcha	= False
 plugins.social_auth.SOCIAL_AUTH_TWITTER_KEY = "foo"
 plugins.social_auth.SOCIAL_AUTH_TWITTER_SECRET = "foo"
 # TODO: Figure out why FB key isn't working
-plugins.social_auth.SOCIAL_AUTH_FACEBOOK_KEY = "420640908052489"
-plugins.social_auth.SOCIAL_AUTH_FACEBOOK_SECRET = "8c2cb77a032b66e9b3b04fda0561d587"
+plugins.social_auth.SOCIAL_AUTH_FACEBOOK_KEY = "214004092328956"
+plugins.social_auth.SOCIAL_AUTH_FACEBOOK_SECRET = "4785b9039cdad8869e67a41d5c1473e4"
 
 # Configure PSA with all required backends
 # Replace this by the backends that you want to use and have API keys for
